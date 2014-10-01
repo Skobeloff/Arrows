@@ -295,30 +295,23 @@ public class GameFrame extends GameObject {
 	}
 
 	public void getScore() {
-		if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range
-				|| buffer.getX() <= upperRange
-				&& buffer.getX() >= upperRange - range) {
+		if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range || 
+		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range) {
 			System.out.println("BAD");
 			rating.setImage(getImage(BAD));
 			score += 25;
-		} else if (buffer.getX() >= lowerRange
-				&& buffer.getX() <= lowerRange + range * 2
-				|| buffer.getX() <= upperRange
-				&& buffer.getX() >= upperRange - range * 2) {
+		} else if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range * 2 || 
+		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range * 2) {
 			System.out.println("COOL");
 			rating.setImage(getImage(COOL));
 			score += 50;
-		} else if (buffer.getX() >= lowerRange
-				&& buffer.getX() <= lowerRange + range * 3
-				|| buffer.getX() <= upperRange
-				&& buffer.getX() >= upperRange - range * 3) {
+		} else if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range * 3 || 
+		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range * 3) {
 			System.out.println("GREAT");
 			rating.setImage(getImage(GREAT));
 			score += 75;
-		} else if (buffer.getX() >= lowerRange
-				&& buffer.getX() <= lowerRange + range * 4
-				|| buffer.getX() <= upperRange
-				&& buffer.getX() >= upperRange - range * 4) {
+		} else if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range * 4 || 
+		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range * 4) {
 			System.out.println("PERFECT");
 			rating.setImage(getImage(PERFECT));
 			score += 100;
