@@ -1,5 +1,7 @@
 package arrows;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
@@ -7,33 +9,36 @@ import com.golden.gamedev.GameEngine;
 import com.golden.gamedev.GameObject;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.Timer;
+import com.golden.gamedev.object.font.SystemFont;
 
 public class GameFrame extends GameObject {
 
-	private String BG = "./resources/img/bg.png";
-	private String BUFFER = "./resources/img/buffer.png";
-	private String HIT = "./resources/img/hit.png";
-	private String HIT2 = "./resources/img/hit2.png";
+	private static final String BG = "./resources/img/bg.png";
+	private static final String BUFFER = "./resources/img/buffer.png";
+	private static final String HIT = "./resources/img/hit.png";
+	private static final String HIT2 = "./resources/img/hit2.png";
 
-	private String UP = "./resources/img/up.png";
-	private String DOWN = "./resources/img/down.png";
-	private String LEFT = "./resources/img/left.png";
-	private String RIGHT = "./resources/img/right.png";
+	private static final String UP = "./resources/img/up.png";
+	private static final String DOWN = "./resources/img/down.png";
+	private static final String LEFT = "./resources/img/left.png";
+	private static final String RIGHT = "./resources/img/right.png";
 
-	private String UP2 = "./resources/img/up2.png";
-	private String DOWN2 = "./resources/img/down2.png";
-	private String LEFT2 = "./resources/img/left2.png";
-	private String RIGHT2 = "./resources/img/right2.png";
+	private static final String UP2 = "./resources/img/up2.png";
+	private static final String DOWN2 = "./resources/img/down2.png";
+	private static final String LEFT2 = "./resources/img/left2.png";
+	private static final String RIGHT2 = "./resources/img/right2.png";
 
-	private String MUSIC1 = "./resources/snd/piano_introduction.mid";
-	private String MUSIC2 = "./resources/snd/terra_no_kesshin.mid";
-	private String MUSIC3 = "./resources/snd/ffxiii_flash.mid";
+	private static final String SFX = "./resources/snd/Click.wav";
+	private static final String MUSIC1 = "./resources/snd/piano_introduction.mid";
+	private static final String MUSIC2 = "./resources/snd/terra_no_kesshin.mid";
+	private static final String MUSIC3 = "./resources/snd/ffxiii_flash.mid";
 
-	private String BAD = "./resources/img/bad.png";
-	private String GREAT = "./resources/img/great.png";
-	private String COOL = "./resources/img/cool.png";
-	private String PERFECT = "./resources/img/perfect.png";
-	private String MISS = "./resources/img/miss.png";
+	private static final String BAD = "./resources/img/bad.png";
+	private static final String GREAT = "./resources/img/great.png";
+	private static final String COOL = "./resources/img/cool.png";
+	private static final String PERFECT = "./resources/img/perfect.png";
+	private static final String MISS = "./resources/img/miss.png";
+	private static final String BLANK = "./resources/img/blank.png";
 
 	private int dimension = 10;
 
@@ -65,6 +70,9 @@ public class GameFrame extends GameObject {
 
 	private int speed;
 	private Timer delay;
+	
+	private SystemFont font1;
+	private SystemFont font2;
 
 	public GameFrame(GameEngine parent) {
 		super(parent);
@@ -75,8 +83,10 @@ public class GameFrame extends GameObject {
 		background = new Block(getImage(BG), 0, 0);
 		hit = new Block(getImage(HIT), 481, 352);
 		buffer = new Block(getImage(BUFFER), startX, 352);
+		font1 = new SystemFont(new Font("VCR OSD MONO", Font.BOLD, 60), Color.RED);
+		font2 = new SystemFont(new Font("VCR OSD MONO", Font.BOLD, 36), Color.GRAY);
 
-		rating = new Block(getImage("./resources/img/blank.png"), 0, 0);
+		rating = new Block(getImage(BLANK), 0, 0);
 		speed = Arrows.speed;
 		delay = new Timer(speed);
 		if (Arrows.levelselected == 1) {
@@ -103,6 +113,11 @@ public class GameFrame extends GameObject {
 		buffer.render(gd);
 		ARROWS.render(gd);
 		rating.render(gd);
+		
+		font1.drawString(gd, ""+score, 30, 444);
+		font2.drawString(gd, "SCORE", 50, 505);
+		font1.drawString(gd, ""+secCtr, 475, 444);
+		font2.drawString(gd, "TIMER", 475, 505);
 	}
 
 	@Override
@@ -119,6 +134,7 @@ public class GameFrame extends GameObject {
 		buffer.update(l);
 		ARROWS.update(l);
 		if (secCtr == 0) {
+			Arrows.score = score;
 			parent.nextGameID = 2;
 			finish();
 		}
@@ -126,7 +142,6 @@ public class GameFrame extends GameObject {
 	}
 
 	public void displayTime() {
-		System.out.println(secCtr);
 		secCtr--;
 	}
 
@@ -206,12 +221,11 @@ public class GameFrame extends GameObject {
 			}
 		} else if (keyPressed(KeyEvent.VK_SPACE)) {
 			hit.setImage(getImage(HIT2));
-			playSound("./resources/snd/Click.wav");
+			playSound(SFX);
 			if (counter == 7 && lowerRange < buffer.getX()
 					&& buffer.getX() < upperRange) {
 				getScore();
 				createSet();
-				System.out.println(score);
 				scored = true;
 			} else {
 				rating.setImage(getImage(MISS));
@@ -297,22 +311,18 @@ public class GameFrame extends GameObject {
 	public void getScore() {
 		if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range || 
 		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range) {
-			System.out.println("BAD");
 			rating.setImage(getImage(BAD));
 			score += 25;
 		} else if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range * 2 || 
 		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range * 2) {
-			System.out.println("COOL");
 			rating.setImage(getImage(COOL));
 			score += 50;
 		} else if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range * 3 || 
 		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range * 3) {
-			System.out.println("GREAT");
 			rating.setImage(getImage(GREAT));
 			score += 75;
 		} else if (buffer.getX() >= lowerRange && buffer.getX() <= lowerRange + range * 4 || 
 		buffer.getX() <= upperRange && buffer.getX() >= upperRange - range * 4) {
-			System.out.println("PERFECT");
 			rating.setImage(getImage(PERFECT));
 			score += 100;
 		}
