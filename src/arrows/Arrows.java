@@ -6,7 +6,6 @@ import com.golden.gamedev.GameEngine;
 import com.golden.gamedev.GameLoader;
 import com.golden.gamedev.GameObject;
 
-//SEE COMMENTS BELOW FOR THINGS TO DO (SCROLL DOWN MORE) ... :)))
 
 public class Arrows extends GameEngine {
 
@@ -33,5 +32,4 @@ public class Arrows extends GameEngine {
 		game.start();
 
 	}
-
 }
